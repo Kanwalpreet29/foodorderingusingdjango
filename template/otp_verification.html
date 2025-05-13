@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/custom_buttons.css' %}">
+<div class="container mt-5">
+    <h2>OTP Verification</h2>
+    {% if message %}
+        <div class="alert {{ class }}">
+            {{ message }}
+        </div>
+    {% endif %}
+    <form method="post" action="">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="otp">Enter OTP sent to your email:</label>
+            <input type="text" class="form-control" id="otp" name="otp" maxlength="6" required>
+        </div>
+        <button type="submit" class="btn btn-primary mt-2">Verify OTP</button>
+    </form>
+</div>
+{% endblock %}

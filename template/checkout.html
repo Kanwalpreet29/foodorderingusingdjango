@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4" style="margin-top: 10.5rem !important;">
+    <h2>Checkout</h2>
+    {% if cart and items %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Dish</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.dish.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>${{ item.dish.discounted_price }}</td>
+                <td>${{ item.subtotal|floatformat:2 }}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="3" class="text-right"><strong>Total:</strong></td>
+                <td>${{ total_price }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">Confirm and Pay</button>
+    </form>
+    {% else %}
+    <p>Your cart is empty.</p>
+    {% endif %}
+</div>
+{% endblock %}

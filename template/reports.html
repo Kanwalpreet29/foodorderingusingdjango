@@ -1,0 +1,13 @@
+<!-- templates/admin/reports.html -->
+{% extends 'admin/base_site.html' %}
+{% block content %}
+    <h1>Sales Report</h1>
+
+    <div>
+        <h2>Daily Sales Summary</h2>
+        <p><strong>Total Sales:</strong> {{ sales_report.daily_sales }}</p>
+
+        <h3>Chart:</h3>
+        <img src="data:image/png;base64,{{ sales_report.plot }}" alt="Sales Report Chart">
+    </div>
+{% endblock %}

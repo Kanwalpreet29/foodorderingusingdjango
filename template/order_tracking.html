@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block head %}
+<style>
+  .order-tracking-container {
+    max-width: 700px;
+    margin: 100px auto;
+    margin-top: 40px auto;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    font-family: Arial, sans-serif;
+  }
+  h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 70px;
+    margin-top: 70px;
+  }
+  .status-current {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 20px;
+  }
+  ul.status-history {
+    list-style: none;
+    padding: 0;
+  }
+  ul.status-history li {
+    background: #fff;
+    margin-bottom: 10px;
+    padding: 12px 15px;
+    border-left: 5px solid #007bff;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    color: #555;
+  }
+  ul.status-history li:nth-child(odd) {
+    background: #e9f0ff;
+  }
+  .error-message {
+    color: red;
+    font-weight: bold;
+    text-align: center;
+  }
+  a.back-link {
+    display: block;
+    margin-top: 30px;
+    text-align: center;
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  a.back-link:hover {
+    text-decoration: underline;
+  }
+</style>
+{% endblock %}
+{% block content %}
+<div class="order-tracking-container">
+  <h2>Order Tracking</h2>
+
+  {% if error %}
+    <p class="error-message">{{ error }}</p>
+  {% else %}
+    <p><strong>Order ID:</strong> {{ order_id }}</p>
+    <p class="status-current"><strong>Current Status:</strong> {{ current_status }}</p>
+
+    <h3>Status History</h3>
+    <ul class="status-history">
+      {% for status in status_history %}
+        <li>{{ status.updated_at|date:"M d, Y H:i" }} - {{ status.status }}</li>
+      {% empty %}
+        <li>No status history available.</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <a href="{% url 'dashboard' %}" class="back-link">Back to Dashboard</a>
+</div>
+{% endblock %}

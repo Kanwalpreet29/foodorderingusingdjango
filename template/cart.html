@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container" style="padding-top: 100px;">
+    <h2>Your Cart</h2>
+    {% if items %}
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Dish</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Subtotal</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.dish.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>&dollar;{{ item.dish.discounted_price }}</td>
+                <td>&dollar;{{ item.subtotal|floatformat:2 }}</td>
+                <td>
+                    <form method="post" action="{% url 'remove_from_cart' item.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="3" class="text-right"><strong>Total:</strong></td>
+                <td colspan="2">&dollar;{{ total_price }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <a href="{% url 'checkout' %}" class="btn btn-primary">Proceed to Checkout</a>
+    {% else %}
+    <p>Your cart is empty.</p>
+    {% endif %}
+</div>
+<!-- Toast container for popup notifications -->
+<div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 100px;">
+    <div style="position: absolute; top: 0; right: 0;">
+  
+      {% if messages %}
+        {% for message in messages %}
+        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000">
+          <div class="toast-header">
+            <strong class="mr-auto">Notification</strong>
+            <small>Just now</small>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="toast-body">
+            {{ message }}
+          </div>
+        </div>
+        {% endfor %}
+      {% endif %}
+  
+    </div>
+  </div>
+
+  {% block script %}
+<script>
+  $(document).ready(function(){
+    $('.toast').toast('show');
+  });
+</script>
+{% endblock %}
+
+  
+{% endblock %}

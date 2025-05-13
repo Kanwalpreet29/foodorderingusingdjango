@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     "products",
     'paypal.standard.ipn',
     'restaurants',
+    'rest_framework',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -85,6 +87,11 @@ DATABASES = {
     }
 }
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -126,9 +133,7 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 
-STATICFILES_DIRS = [
-    BASE_DIR , "static"
-]
+# Removed incorrect second assignment of STATICFILES_DIRS
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -143,3 +148,18 @@ PAYPAL_TEST = True
 
 # HOST = '127.0.0.1:8000'
 HOST = 'nishantn31.pythonanywhere.com'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}
+
+# Email backend configuration for sending OTP emails
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'kanwalpreet1314@gmail.com'  # Replace with your email
+EMAIL_HOST_PASSWORD = 'lgfw mzvn pcnj vcyz'
+

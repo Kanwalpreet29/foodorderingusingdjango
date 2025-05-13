@@ -29,6 +29,8 @@
         width: 80%;
     }
 </style>
+
+<script src="https://kit.fontawesome.com/698dea9f7b.js" crossorigin="anonymous"></script>
 {% endblock %}
 {% block content %}
 
@@ -68,7 +70,7 @@
                             </li>
                             <li class="nav-item">
                                 <a href="{% url 'view_cart' %}" class="nav-link">
-                                    Cart <img src="{% static 'img/cart_icon.png' %}" alt="Cart" style="height:20px; width:20px;">
+                                    Cart <i class="fa-solid fa-cart-plus"></i> 
                                 </a>
                             </li>
                         </ul>
@@ -88,6 +90,27 @@
                                         <p><strong>Member Since: </strong>{{user.date_joined}}</p>
                                         <p><strong>Last Login: </strong>{{user.last_login}}</p>
                                         
+                                    </div>
+                                    <div class="col-md-12 mt-4">
+                                        <!-- <h3>Dishes</h3> -->
+                                        <div class="row">
+                                            {% for dish in dishes %}
+                                            <div class="col-md-3 mb-3">
+                                                <div class="card">
+                                                    {% if dish.image %}
+                                                    <img src="/media/{{dish.image}}" class="card-img-top" alt="{{dish.name}}">
+                                                    {% else %}
+                                                    <img src="{% static 'img/default_dish.jpg' %}" class="card-img-top" alt="{{dish.name}}">
+                                                    {% endif %}
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">{{dish.name}}</h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% empty %}
+                                            <!-- <p>No dishes available.</p> -->
+                                            {% endfor %}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -147,16 +170,15 @@
 
                              <ul class="list-group">
                                 {% for order in orders %}
-                                <a href="{% url 'dish' id=order.item.id %}">
                                     <li class="list-group-item list-group-item-action">
                                         <div class="row">
                                             <div class="col-md-2">
-                                                <img src="/media/{{order.item.image}}" style="height:70px" class="rounded">
+                                                <!-- No image available as item is a string -->
+                                                <span class="badge badge-secondary">No Image</span>
                                             </div>
                                              <div class="col-md-8">
-                                                <h4>{{order.item.name}}</h4>
-                                                <p>&dollar; {{order.item.discounted_price}}</p>
-                                                <p class="my-0"><small>INVOICE ID: {{order.invoice_id}}</small></p>
+                                                <h4>{{order.item_name}}</h4>
+                                                <p><small>INVOICE ID: {{order.invoice_id}}</small></p>
                                                 <p class="font-italic"><small>{{order.ordered_on}}</small></p>
                                              </div>  
                                              <div class="col-md-2">
@@ -173,7 +195,6 @@
                                              </div>
                                         </div>
                                     </li>
-                                    </a>
                                 {% endfor %}
                              </ul>
                             </div>

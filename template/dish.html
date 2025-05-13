@@ -1,26 +1,21 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/custom_buttons.css' %}">
 <!-- Page Header Start -->
 <div class="page-header mb-0">
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <h2>{{dish.name}}</h2>
+                <h2>{{ dish.name }}</h2>
             </div>
             <div class="col-12">
-                <a href="/dishes/?q={{dish.category.id}}">{{dish.category.name}}</a>
+                <a href="/dishes/?q={{ dish.category.id }}">{{ dish.category.name }}</a>
             </div>
         </div>
     </div>
 </div>
 <!-- Page Header End -->
-
-
-
-
-
-
-
 
 <!-- Food Start -->
 <div class="food mt-0">
@@ -28,42 +23,56 @@
         <div class="row align-items-center">
             <div class="col-md-6 mx-auto">
                 <div class="food-item">
-                   
-                    <a href="/media/{{dish.image}}" target="_blank"><img src="/media/{{dish.image}}" style="height: 300px;width: 100%;"></a>
-                    <h2 class="my-3">{{dish.name}}</h2>
-                    <p>
-                        {{dish.details}}
-                    </p>
+                    <a href="/media/{{ dish.image }}" target="_blank">
+                        <img src="/media/{{ dish.image }}" style="height: 300px; width: 100%;">
+                    </a>
+                    <h2 class="my-3">{{ dish.name }}</h2>
+                    <p>{{ dish.details }}</p>
                     <h4 class="menu-text" style="font-weight: normal;">
                         {% if dish.price != dish.discounted_price %}
-                            <strong><del>&dollar;{{dish.price}}</del></strong>
+                            <strong><del>&dollar;{{ dish.price }}</del></strong>
                         {% endif %}
-                            <strong>&dollar;{{dish.discounted_price}}</strong>
+                        <strong>&dollar;{{ dish.discounted_price }}</strong>
                     </h4>
                     <p>
                         <script>
-                            var ing = '{{dish.ingredients}}'.split(',');
-                            for(ingredient in ing){
-                                document.write("<span class='btn btn-sm mr-1 mb-1 btn-outline-success'>"+ing[ingredient]+"</span>");
+                            var ing = '{{ dish.ingredients }}'.split(',');
+                            for (ingredient in ing) {
+                                document.write("<span class='btn btn-sm mr-1 mb-1 btn-outline-success'>" + ing[ingredient] + "</span>");
                             }
                         </script>
                     </p>
-                    <!-- {{user.is_active}} -->
-                    
-                    {% if dish.is_available %}
-                    
-                        {% if user.is_superuser or user.is_staff %}
-                        
-                        {% elif user.is_active %}
-                            {{form.render}}
-                        {% else %}
-                            <p><a href="{% url 'login' %}">Login to Buy</a> </p>
-                        {% endif %}
-                    {% else %}
-                        <p class="text-danger">Not Available for delivery!</p>
-                    {% endif %}
 
-                    <a href="/dishes/?q={{dish.category.id}}">More Dishes under {{dish.category.name}}</a>
+                    {% if dish.is_available %}
+                        {% if user.is_superuser or user.is_staff %}
+                            <!-- Admin or staff view, no order form -->
+                    {% elif user.is_active %}
+                        {% if messages %}
+                            <div>
+                                {% for message in messages %}
+                                    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <form method="post" action="">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <button type="submit" class="btn btn-primary mt-2">Order Now</button>
+                        </form>
+                        <form method="post" action="{% url 'add_to_cart' dish.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success mt-2">Add to Cart</button>
+                        </form>
+                    {% else %}
+                        <p><a href="{% url 'login' %}">Login to Buy</a></p>
+                    {% endif %}
+                {% else %}
+                    <p class="text-danger">Not Available for delivery!</p>
+                {% endif %}
+
+                    <a href="/dishes/?q={{ dish.category.id }}">More Dishes under {{ dish.category.name }}</a>
                 </div>
             </div>
         </div>
